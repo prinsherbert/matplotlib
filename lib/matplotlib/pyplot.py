@@ -3780,3 +3780,21 @@ def viridis():
         im.set_cmap(cm.viridis)
 
 _setup_pyplot_info_docstrings()
+
+
+def axis_iterator(rows, cols, show_in_between=False, **kargs):
+    '''
+    Iteratively yields the axis object of a rows x cols subplot and creates
+    new figures when all subplots were yielded
+    '''
+    while True:
+        _, axes = subplots(rows, cols, **kargs)
+        if rows == 1 or cols == 1:
+            for i in range(max([rows, cols])):
+                yield axes[i]
+        else:
+            for row in range(rows):
+                for col in range(cols):
+                    yield axes[row, col]
+        if show_in_between:
+            show(block=False)
